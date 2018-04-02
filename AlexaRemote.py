@@ -12,3 +12,6 @@ ask = Ask(app, '/remote/')
 def change_tv_power(power):
     message = "I have been reached"
     return statement(message)
+
+if __name__ == '__main__':
+    app.run(debug=True)
