@@ -7,6 +7,13 @@ from flask_ask import Ask, statement
 app = Flask(__name__)
 ask = Ask(app, '/remote/')
 
+@ask.launch
+def launch():
+    message = "Hello Kaylie. I am the Alexa Remote. " \
+              "You can ask me to power on or off the tv, turn volume up or down, and change inputs. " \
+              "What would you like to do?"
+    return statement(message)
+
 @ask.intent('TVPowerOn')
 def power_on():
     message = "TV has been turned on"
