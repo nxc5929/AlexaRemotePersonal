@@ -49,5 +49,18 @@ def input_change():
     message = "The input has been changed"
     return statement(message)
 
+
+@ask.intent('LEDLightsON')
+def led_lights_on():
+    message = "The lights have been turned on"
+    os.system("irsend SEND_ONCE LED KEY_POWER")
+    return statement(message)
+
+@ask.intent('LEDLightsOff')
+def led_lights_off():
+    message = "The lights have been turned off"
+    os.system("irsend SEND_ONCE LED KEY_POWER")
+    return statement(message)
+
 if __name__ == '__main__':
     app.run(debug=True)
