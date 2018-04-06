@@ -1,1 +1,3 @@
 volumeSet: "The volume has been set to {{volume}}"
+
+brightnessSet: "The brightness has been set to {{brightness}}"
