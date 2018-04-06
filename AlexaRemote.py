@@ -99,6 +99,12 @@ def led_lights_nice_blue():
     os.system("irsend SEND_ONCE LED KEY_NICEBLUE")
     return statement(message)
 
+@ask.intent('LightsWhite')
+def led_lights_nice_blue():
+    message = "The lights have been turned white"
+    os.system("irsend SEND_ONCE LED KEY_WHITE")
+    return statement(message)
+
 @ask.intent('LightsFade')
 def led_lights_fade():
     message = "The lights have been set to fade"
