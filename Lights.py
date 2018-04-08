@@ -26,15 +26,15 @@ class Lights(threading.Thread):
         self.currentBrightness = 0
         self.wantedBrightness = 0
         self.options = {
-            LightStates.STANDBY : standby,
-            LightStates.POWER : power,
-            LightStates.BLUE : blue,
-            LightStates.RED : red,
-            LightStates.GREEN : green,
-            LightStates.NICE_BLUE : nice_blue,
-            LightStates.FADE : fade,
-            LightStates.WHITE : white,
-            LightStates.BRIGHTNESS : brightness
+            LightStates.STANDBY : self.standby,
+            LightStates.POWER :self.power,
+            LightStates.BLUE : self.blue,
+            LightStates.RED : self.red,
+            LightStates.GREEN : self.green,
+            LightStates.NICE_BLUE : self.nice_blue,
+            LightStates.FADE : self.fade,
+            LightStates.WHITE : self.white,
+            LightStates.BRIGHTNESS : self.brightness
         }
 
     def reset(self):
