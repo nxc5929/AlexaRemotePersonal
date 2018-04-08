@@ -21,6 +21,21 @@ class Lights(threading.Thread):
         self.name = name
         self.counter = counter
         self.delay = 0.5
+        self.currentState = LightStates.STANDBY
+        self.lightsOn = False
+        self.currentBrightness = 0
+        self.wantedBrightness = 0
+        self.options = {
+            LightStates.STANDBY : standby,
+            LightStates.POWER : power,
+            LightStates.BLUE : blue,
+            LightStates.RED : red,
+            LightStates.GREEN : green,
+            LightStates.NICE_BLUE : nice_blue,
+            LightStates.FADE : fade,
+            LightStates.WHITE : white,
+            LightStates.BRIGHTNESS : brightness
+        }
 
     def reset(self):
         global currentState
@@ -33,7 +48,6 @@ class Lights(threading.Thread):
         os.system("irsend SEND_ONCE LED KEY_POWER")
         self.reset()
 
-    lightsOn = False
     def power_lights(self, on):
         if on != self.lightsOn:
             self.lightsOn = on
@@ -66,8 +80,6 @@ class Lights(threading.Thread):
         self.reset()
 
     #1-8
-    currentBrightness = 0
-    wantedBrightness = 0
     def brightness(self):
         if(self.currentBrightness > self.wantedBrightness):
             while(self.currentBrightness > self.wantedBrightness):
@@ -82,36 +94,23 @@ class Lights(threading.Thread):
         self.reset()
 
     def set_brightness(self, bright):
-        if bright.isdigit() and bright in range(1,9):
+        if bright in range(1,9):
             self.wantedBrightness = bright
             self.changeState(LightStates.BRIGHTNESS)
             return True
         else:
             return False
 
-
-    currentState = LightStates.STANDBY
     def changeState(self, state):
         if state is LightStates:
             self.currentState = state
             print("State changed to " + str(state))
-
-    options = {
-        LightStates.STANDBY : standby,
-        LightStates.POWER : power,
-        LightStates.BLUE : blue,
-        LightStates.RED : red,
-        LightStates.GREEN : green,
-        LightStates.NICE_BLUE : nice_blue,
-        LightStates.FADE : fade,
-        LightStates.WHITE : white,
-        LightStates.BRIGHTNESS : brightness
-    }
 
     def execute(self):
         self.options[self.currentState](self)
 
     def run(self):
         while(True):
+            print("execute")
             self.execute()
             sleep(self.delay)
