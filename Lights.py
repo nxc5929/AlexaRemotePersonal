@@ -20,6 +20,7 @@ class Lights(threading.Thread):
         self.threadID = threadID
         self.name = name
         self.counter = counter
+        self.delay = 0.5
 
     def reset(self):
         global currentState
@@ -113,3 +114,4 @@ class Lights(threading.Thread):
     def run(self):
         while(True):
             self.execute()
+            sleep(self.delay)
