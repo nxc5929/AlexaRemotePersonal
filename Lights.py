@@ -107,7 +107,7 @@ class Lights(threading.Thread):
             print("State changed to " + str(state))
 
     def execute(self):
-        self.options[self.currentState](self)
+        self.options[self.currentState]()
 
     def run(self):
         while(True):
