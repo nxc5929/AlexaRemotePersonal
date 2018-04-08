@@ -81,7 +81,7 @@ class Lights(threading.Thread):
         self.reset()
 
     def set_brightness(self, bright):
-        if bright is int and bright in range(1,9):
+        if bright.isdigit() and bright in range(1,9):
             self.wantedBrightness = bright
             self.changeState(LightStates.BRIGHTNESS)
             return True
