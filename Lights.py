@@ -111,6 +111,5 @@ class Lights(threading.Thread):
 
     def run(self):
         while(True):
-            print("execute")
             self.execute()
             sleep(self.delay)
