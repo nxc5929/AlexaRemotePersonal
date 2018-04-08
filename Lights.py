@@ -102,9 +102,8 @@ class Lights(threading.Thread):
             return False
 
     def changeState(self, state):
-        if state is LightStates:
-            self.currentState = state
-            print("State changed to " + str(state))
+        self.currentState = state
+        print("State changed to " + str(state))
 
     def execute(self):
         self.options[self.currentState]()
