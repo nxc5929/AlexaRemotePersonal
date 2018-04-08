@@ -39,7 +39,7 @@ class Lights(threading.Thread):
 
     def reset(self):
         global currentState
-        currentState = LightStates.STANDBY
+        self.currentState = LightStates.STANDBY
 
     def standby(self):
         return
