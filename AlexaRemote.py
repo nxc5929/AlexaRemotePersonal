@@ -118,7 +118,7 @@ def led_lights_brightness(brightness):
     if light_thread.set_brightness(brightness):
         message = render_template('brightnessSet', brightness=brightness)
     else:
-        message = "Brightness must be in range 0 to 8. Please try again."
+        message = "Brightness must be in range 1 to 8. Please try again."
     return statement(message)
 
 if __name__ == '__main__':
