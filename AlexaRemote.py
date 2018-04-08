@@ -61,7 +61,7 @@ def default():
     message = "This feature hasn't been added yet"
     return statement(message)
 
-@ask.intent('LightsOff')
+@ask.intent('LightsOn')
 def led_lights_on():
     if light_thread.power_lights(True):
         message = "Lights have been turned on"
