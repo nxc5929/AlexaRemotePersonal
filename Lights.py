@@ -92,12 +92,12 @@ class Lights(threading.Thread):
             while(self.currentBrightness > self.wantedBrightness):
                 os.system("irsend SEND_ONCE LED KEY_BRIGHTDOWN")
                 self.currentBrightness = self.currentBrightness - 1
-                sleep(0.25)
+                sleep(0.5)
         else:
             while(self.currentBrightness < self.wantedBrightness):
                 os.system("irsend SEND_ONCE LED KEY_BRIGHTUP")
                 self.currentBrightness = self.currentBrightness + 1
-                sleep(0.25)
+                sleep(0.5)
         self.reset()
 
     def set_brightness(self, bright):
