@@ -1,7 +1,7 @@
-import os
+import json
 from Lights import Lights, LightStates
 
-from flask import Flask, render_template
+from flask import Flask, render_template, current_app, request
 from flask_ask import Ask, statement
 
 app = Flask(__name__)
@@ -120,6 +120,41 @@ def led_lights_brightness(brightness):
     else:
         message = "Brightness must be in range 1 to 8. Please try again."
     return statement(message)
+
+@app.route('/updateLightData', methods=['POST'])
+def update_lights_data():
+    new_data = request.get_json()
+    print(new_data)
+    old_data = json.loads(get_lights_data())
+    print(old_data)
+    if new_data.get('power') != old_data.get('power'):
+        light_thread.power_lights(new_data.get('power'))
+    if new_data.get('color') != old_data.get('color'):
+        color = new_data.get('color')
+        if color == "blue":
+            light_thread.changeState(LightStates.BLUE)
+        elif  color == "nice-blue":
+            light_thread.changeState(LightStates.NICE_BLUE)
+        elif  color == "green":
+            light_thread.changeState(LightStates.GREEN)
+        elif color == "red":
+            light_thread.changeState(LightStates.RED)
+        elif color == "white":
+            light_thread.changeState(LightStates.WHITE)
+        elif color == "flow":
+            light_thread.changeState(LightStates.FADE)
+    if new_data.get('brightness') != old_data.get('brightness'):
+        light_thread.set_brightness(new_data.get('brightness'))
+    return "Success"
+
+@app.route('/getLightData', methods=['GET'])
+def get_lights_data():
+    return json.dumps(light_thread.getData())
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return current_app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

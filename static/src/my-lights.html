@@ -1,0 +1,118 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="my-view1">
+    <template>
+        <style>
+            paper-card{
+                padding: 10px;
+                margin: 10px;
+            }
+
+            paper-slider{
+                width: 100%
+            }
+        </style>
+
+        <iron-ajax id="sendData"
+            method="POST"
+            url="/updateLightData"
+            body='[[parameters]]'
+            content-type="application/json"
+            handle-as="json"
+            debounce-duration="300">
+        </iron-ajax>
+
+
+        <iron-ajax
+                auto
+                method="GET"
+                url="/getLightData"
+                handle-as="json"
+                on-response="_initVariables"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <div>
+            <paper-card heading="LED Lights">
+                <paper-toggle-button checked="{{power}}">Power</paper-toggle-button>
+                <paper-radio-group selected="{{selected}}">
+                    <paper-radio-button name="blue">Blue</paper-radio-button>
+                    <paper-radio-button name="nice-blue">Nice Blue</paper-radio-button>
+                    <paper-radio-button name="green">Green</paper-radio-button>
+                    <paper-radio-button name="red">Red</paper-radio-button>
+                    <paper-radio-button name="white">White</paper-radio-button>
+                    <br>
+                    <paper-radio-button name="fade">Flow</paper-radio-button>
+                </paper-radio-group>
+                <paper-slider min="1" max="8" step="1" value="{{brightness}}"></paper-slider>
+
+                Power: [[power]]<br>
+                Selected: [[selected]]<br>
+                Brightness: [[brightness]]
+            </paper-card>
+	    </div>
+    </template>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+		static get is() { return 'my-view1'; }
+
+        static get properties() {
+            return {
+                initialLoad: {
+                    type: Boolean,
+                    value: false
+                },
+                power: {
+                    type: Boolean,
+                    observer: '_dataChanged'
+                },
+                selected: {
+                    type: String,
+                    observer: '_dataChanged'
+                },
+                brightness: {
+                    type: Number,
+                    observer: '_dataChanged'
+                },
+                parameters: {
+                    type: Object,
+                    value: {"power": this.power, "color": this.selected, "brightness": this.brightness}
+                }
+            }
+        }
+
+        _dataChanged(){
+            this.parameters = {"power": this.power, "color": this.selected, "brightness": this.brightness};
+            if(this.initialLoad) {
+                this.$.sendData.generateRequest();
+            }
+        }
+
+        _initVariables(e){
+            var data = e.detail.response;
+            this.power = data.power;
+            this.selected = data.color;
+            this.brightness = data.brightness;
+            this.initialLoad = true;
+        }
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>

@@ -23,8 +23,9 @@ class Lights(threading.Thread):
         self.delay = 0.5
         self.currentState = LightStates.STANDBY
         self.lightsOn = False
-        self.currentBrightness = 0
-        self.wantedBrightness = 0
+        self.currentBrightness = 1
+        self.color = "blue"
+        self.wantedBrightness = 1
         self.options = {
             LightStates.STANDBY : self.standby,
             LightStates.POWER :self.power,
@@ -56,26 +57,32 @@ class Lights(threading.Thread):
         return False
 
     def blue(self):
+        self.color = "blue"
         os.system("irsend SEND_ONCE LED KEY_BLUE")
         self.reset()
 
     def red(self):
+        self.color = "red"
         os.system("irsend SEND_ONCE LED KEY_RED")
         self.reset()
 
     def green(self):
+        self.color = "green"
         os.system("irsend SEND_ONCE LED KEY_GREEN")
         self.reset()
 
     def nice_blue(self):
+        self.color = "nice-blue"
         os.system("irsend SEND_ONCE LED KEY_NICEBLUE")
         self.reset()
 
     def fade(self):
+        self.color = "fade"
         os.system("irsend SEND_ONCE LED KEY_FADE")
         self.reset()
 
     def white(self):
+        self.color = "white"
         os.system("irsend SEND_ONCE LED KEY_WHITE")
         self.reset()
 
@@ -85,12 +92,12 @@ class Lights(threading.Thread):
             while(self.currentBrightness > self.wantedBrightness):
                 os.system("irsend SEND_ONCE LED KEY_BRIGHTDOWN")
                 self.currentBrightness = self.currentBrightness - 1
-                sleep(0.5)
+                sleep(0.25)
         else:
             while(self.currentBrightness < self.wantedBrightness):
                 os.system("irsend SEND_ONCE LED KEY_BRIGHTUP")
                 self.currentBrightness = self.currentBrightness + 1
-                sleep(0.5)
+                sleep(0.25)
         self.reset()
 
     def set_brightness(self, bright):
@@ -100,6 +107,9 @@ class Lights(threading.Thread):
             return True
         else:
             return False
+
+    def getData(self):
+        return {"power": self.lightsOn, "color": self.color, "brightness": self.wantedBrightness}
 
     def changeState(self, state):
         self.currentState = state
