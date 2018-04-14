@@ -132,6 +132,27 @@ def led_lights_brightness(brightness):
         message = "Brightness must be in range 1 to 8. Please try again."
     return statement(message)
 
+@app.route('/changeInput', methods=['POST'])
+def change_input():
+    tv_thread.changeState(TVStates.INPUT)
+    return "Success"
+
+@app.route('/changeVolume', methods=['POST'])
+def change_volume():
+    volume = request.get_json().get('volume')
+    tv_thread.set_volume(volume)
+    return "Success"
+
+@app.route('/changePower', methods=['POST'])
+def change_power():
+    power = request.get_json().get('power')
+    tv_thread.power_tv(power)
+    return "Success"
+
+@app.route('/getTVData', methods=['GET'])
+def get_tv_data():
+    return json.dumps(tv_thread.getData())
+
 @app.route('/updateLightData', methods=['POST'])
 def update_lights_data():
     new_data = request.get_json()

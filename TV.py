@@ -86,7 +86,7 @@ class TV(threading.Thread):
         self.set_volume(self.wantedVolume - 2)
 
     def getData(self):
-        return {"power": self.tvOn, "volume": self.volume}
+        return {"power": self.tvOn, "volume": self.wantedVolume}
 
     def changeState(self, state):
         self.currentState = state

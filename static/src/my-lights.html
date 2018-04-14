@@ -50,20 +50,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div>
             <paper-card heading="LED Lights">
                 <paper-toggle-button checked="{{power}}">Power</paper-toggle-button>
-                <paper-radio-group selected="{{selected}}">
-                    <paper-radio-button name="blue">Blue</paper-radio-button>
-                    <paper-radio-button name="nice-blue">Nice Blue</paper-radio-button>
-                    <paper-radio-button name="green">Green</paper-radio-button>
-                    <paper-radio-button name="red">Red</paper-radio-button>
-                    <paper-radio-button name="white">White</paper-radio-button>
-                    <br>
-                    <paper-radio-button name="fade">Flow</paper-radio-button>
-                </paper-radio-group>
-                <paper-slider min="1" max="8" step="1" value="{{brightness}}"></paper-slider>
+                <div hidden$="[[!power]]">
+                    <paper-radio-group selected="{{selected}}">
+                        <paper-radio-button name="blue">Blue</paper-radio-button>
+                        <paper-radio-button name="nice-blue">Nice Blue</paper-radio-button>
+                        <paper-radio-button name="green">Green</paper-radio-button>
+                        <paper-radio-button name="red">Red</paper-radio-button>
+                        <paper-radio-button name="white">White</paper-radio-button>
+                        <br>
+                        <paper-radio-button name="fade">Flow</paper-radio-button>
+                    </paper-radio-group>
+                    <paper-slider min="1" max="8" step="1" value="{{brightness}}"></paper-slider>
 
-                Power: [[power]]<br>
-                Selected: [[selected]]<br>
-                Brightness: [[brightness]]
+                    Power: [[power]]<br>
+                    Selected: [[selected]]<br>
+                    Brightness: [[brightness]]
+                </div>
             </paper-card>
 	    </div>
     </template>

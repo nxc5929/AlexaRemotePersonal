@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="lazy-import" href="my-lights.html">
+<link rel="lazy-import" href="my-tv.html">
 
 <dom-module id="my-app">
   <template>
@@ -86,7 +87,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="Lights" href="[[rootPath]]lights">Lights</a>
+            <a name="Lights" href="[[rootPath]]lights">Lights</a>
+            <a name="TV" href="[[rootPath]]tv">TV</a>
 		</iron-selector>
       </app-drawer>
 
@@ -107,7 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="lights"></my-view1>
+            <my-view1 name="lights"></my-view1>
+            <my-view3 name="tv"></my-view3>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -150,7 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'lights';
+        this.page = page || 'tv';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {

@@ -1,0 +1,106 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="my-view3">
+    <template>
+        <style>
+            paper-card{
+                padding: 10px;
+                margin: 10px;
+            }
+
+            paper-slider{
+                width: 100%
+            }
+        </style>
+
+        <iron-request id="xhr"></iron-request>
+
+        <iron-ajax
+                auto
+                method="GET"
+                url="/getTVData"
+                handle-as="json"
+                on-response="_initVariables"
+                debounce-duration="300">
+        </iron-ajax>
+
+        <div>
+            <paper-card heading="Sony TV">
+                <paper-toggle-button checked="{{power}}">Power</paper-toggle-button>
+                <div hidden$="[[!power]]">
+                    <paper-slider min="0" max="100" step="1" value="{{volume}}"></paper-slider>
+                    <paper-button on-click="_inputChange" raised>Change Input</paper-button><br><br>
+                    Power: [[power]]<br>
+                    Volume: [[volume]]<br>
+                </div>
+            </paper-card>
+	    </div>
+    </template>
+
+  <script>
+    class MyView3 extends Polymer.Element {
+		static get is() { return 'my-view3'; }
+
+        static get properties() {
+            return {
+                initialLoad: {
+                    type: Boolean,
+                    value: false
+                },
+                power: {
+                    type: Boolean,
+                    observer: '_powerChanged'
+                },
+                volume: {
+                    type: Number,
+                    observer: '_volumeChanged'
+                }
+            }
+        }
+
+        _initVariables(e){
+            var data = e.detail.response;
+            this.power = data.power;
+            this.volume = data.volume;
+            this.initialLoad = true;
+        }
+
+        _inputChange() {
+            if (this.initialLoad){
+                this.$.xhr.send({url: "/changeInput", method: "POST"});
+            }
+        }
+
+        _powerChanged(){
+            if (this.initialLoad){
+                var params = {"power": this.power};
+                this.$.xhr.send({url: "/changePower", headers: {"Content-Type": "application/json"}, method: "POST", body: params});
+            }
+        }
+
+        _volumeChanged(){
+            if (this.initialLoad){
+                var params = {"volume": this.volume};
+                this.$.xhr.send({url: "/changePower", headers: {"Content-Type": "application/json"}, method: "POST", body: params});
+            }
+        }
+    }
+
+    window.customElements.define(MyView3.is, MyView3);
+  </script>
+</dom-module>
