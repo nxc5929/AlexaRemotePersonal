@@ -46,6 +46,8 @@ class TV(threading.Thread):
 
     def input(self):
         os.system("irsend SEND_ONCE Sony-TV KEY_INPUT")
+        sleep(0.5)
+        os.system("irsend SEND_ONCE Sony-TV KEY_INPUT")
         self.reset()
 
     def power_tv(self, on):
@@ -64,7 +66,7 @@ class TV(threading.Thread):
                 sleep(0.5)
         else:
             while(self.currentVolume < self.wantedVolume):
-                os.system("irsend SEND_ONCE LED KEY_VOLUMEUP")
+                os.system("irsend SEND_ONCE Sony-TV KEY_VOLUMEUP")
                 self.currentVolume = self.currentVolume + 1
                 sleep(0.5)
         self.reset()
