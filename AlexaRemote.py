@@ -1,5 +1,6 @@
 import json
 from Lights import Lights, LightStates
+from TV import TV, TVStates
 
 from flask import Flask, render_template, current_app, request
 from flask_ask import Ask, statement
@@ -10,6 +11,9 @@ ask = Ask(app, '/remote/')
 light_thread = Lights(1, "Lights-1", 1)
 light_thread.start()
 
+tv_thread = TV(2, "Tv-1", 2)
+tv_thread.start()
+
 @ask.launch
 def launch():
     message = "Hello Kaylie. I am the Alexa Remote. " \
@@ -19,36 +23,43 @@ def launch():
 
 @ask.intent('TVPowerOn')
 def power_on():
-    message = "TV has been turned on"
+    if tv_thread.power_tv(True):
+        message = "TV has been turned on"
+    else:
+        message = "TV is already on"
     return statement(message)
 
 @ask.intent('TVPowerOff')
 def power_off():
-    message = "TV has been turned off"
+    if tv_thread.power_tv(False):
+        message = "TV has been turned off"
+    else:
+        message = "TV is already off"
     return statement(message)
 
 @ask.intent('TVVolumeUp')
 def volume_up():
+    tv_thread.set_volume_up()
     message = "Volume has been turned up"
     return statement(message)
 
 @ask.intent('TVVolumeDown')
 def volume_down():
+    tv_thread.set_volume_down()
     message = "Volume has been turned down"
     return statement(message)
 
 @ask.intent('TVVolumeSet', convert={'volume': int})
 def volume_set(volume):
-    message = render_template('volumeSet', volume=volume)
-    return statement(message)
-
-@ask.intent('TVVolumeSetup')
-def volume_setup():
-    message = "Volume has been setup"
+    if tv_thread.set_volume(volume):
+        message = render_template('volumeSet', volume=volume)
+    else:
+        message = "Volume must be in the range 0 - 100"
     return statement(message)
 
 @ask.intent('TVChangeInput')
 def input_change():
+    tv_thread.changeState(TVStates.INPUT)
     message = "The input has been changed"
     return statement(message)
 
